@@ -1,7 +1,21 @@
 'use strict';
 
-let money = +prompt("Ваш бюджет на месяц?", ''),
+let money,
+   time;
+
+function start() {
+   money = +prompt("Ваш бюджет на месяц?", '');
+
+
+   while (isNaN(money) || money == "" || money == null) {
+      money = +prompt("Ваш бюджет на месяц?", '');
+   }
    time = prompt('Введите дату в формате YYYY-MM-DD', '');
+}
+
+start();
+
+
 
 let appData = {
    budget: money,
@@ -12,59 +26,83 @@ let appData = {
    savings: false
 };
 
-for (let i = 0; i < 2; i++) {
+
+
+function showExpenses() {
    let a = prompt("Введите обязательную статью расходов в этом месяце", ''),
       b = prompt("Во сколько обойдется?", '');
 
-   if (typeof (a) === "string" && typeof (a) != null && typeof (b) != null &&
-      a != "" && b != "" && a.length < 50 && b.length < 50) {
-      console.log("done");
-      appData.expenses[a] + b;
-   } else {
+   while (isNaN(a) || a == "" || a == null) {
+      a = prompt("Введите обязательную статью расходов в этом месяце", '');
 
    }
-};
-// let i = 0;
+   while (isNaN(b) || b == "" || b == null) {
+      b = prompt("Во сколько обойдется?", '');
 
-// while (i < 2) {
-//    let a = prompt("Введите обязательную статью расходов в этом месяце", ''),
-//       b = prompt("Во сколько обойдется?", '');
+   }
+}
+showExpenses();
 
-//    if (typeof (a) === "string" && typeof (a) != null && typeof (b) != null &&
-//       a != "" && b != "" && a.length < 50 && b.length < 50) {
-//       console.log("done");
-//       appData.expenses[a] + b;
-//    } else {
+function detectDayBudget() {
+   appData.moneyPerDay = (appData.budget / 30).toFixed();
 
-//    }
-//    i++
-// }
+   alert("Ваш бюджет составляет " + appData.moneyPerDay);
+}
+detectDayBudget();
 
-// do {
-//    let a = prompt("Введите обязательную статью расходов в этом месяце", ''),
-//       b = prompt("Во сколько обойдется?", '');
 
-//    if (typeof (a) === "string" && typeof (a) != null && typeof (b) != null &&
-//       a != "" && b != "" && a.length < 50 && b.length < 50) {
-//       console.log("done");
-//       appData.expenses[a] + b;
-//    } else {
+function detectLevel() {
+   if (appData.moneyPerDay < 100) {
+      console.log("Малый достаток");
+   } else if (appData.moneyPerDay > 100 && appData.moneyPerDay < 2000) {
+      console.log("Средний достаток");
+   } else if (appData.moneyPerDay > 2000) {
+      console.log("Высокий уровень достатка");
+   } else {
+      console.log("Произошла ошибка");
+   }
+}
+detectLevel();
 
-//    }
-//    i++
-// }
-// while (i < 2);
 
-appData.moneyPerDay = appData.budget / 30;
+function showIncomeMonth() {
 
-alert("Ваш бюджет составляет " + appData.moneyPerDay);
+   let a = prompt("Есть ли у Вас дипозит ", "");
 
-if (appData.moneyPerDay < 100) {
-   console.log("Малый достаток");
-} else if (appData.moneyPerDay > 100 && appData.moneyPerDay < 2000) {
-   console.log("Средний достаток");
-} else if (appData.moneyPerDay > 2000) {
-   console.log("Высокий уровень достатка");
-} else {
-   console.log("Произошла ошибка");
-};
+   if (a == "да" && typeof (a) != Number && a != "" && a != null) {
+      appData.savings = true;
+   } else if (a == "нет" && a == "Нет" && typeof (a) != Number && a != "" && a != null) {
+      let b = prompt("Не хотели бы вы его открыть?", "")
+      if (b == "да" && typeof (a) != Number && a != "" && a != null) {
+         alert("Мы с Вами свяжемся");
+      } else if (b == "нет" && typeof (a) != Number && a != "" && a != null) {
+         alert("Спасибо за внимание!!");
+      }
+   } else {
+      alert("Хорошего Вам дня!");
+   }
+
+   if (appData.savings == true) {
+      let c = +prompt("Сколько денег на Вашем депозите?"),
+         d = +prompt("Под Какой процент?");
+
+      appData.monthincome = (c / 100 / 12 * d).toFixed();
+      alert("Ваш ежемесячный доход составляет: " + appData.monthincome);
+   }
+
+}
+
+showIncomeMonth();
+
+function chooseOptExpenses() {
+   for (let i = 1; i <= 3; i++) {
+      let expopt = prompt("Статья необязательных расходов?");
+      appData.optionalExpenses[i] = expopt;
+
+   }
+
+   console.log(appData);
+
+}
+
+chooseOptExpenses();
